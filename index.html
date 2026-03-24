@@ -1,62 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>鹿田弓道部 新歓2026</title>
+  <base target="_top">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=VT323&display=swap');
-    :root { --bg: #568670; --pop-pink: #FF87B2; --pop-yellow: #FFD93D; --pop-blue: #70D6FF; --pop-purple: #B388FF; }
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+    :root { --bg: #568670; --pop-pink: #FF87B2; --pop-yellow: #FFD93D; }
     body { background-color: var(--bg); font-family: 'M PLUS Rounded 1c', sans-serif; color: white; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-    #interactive-bg { position: fixed; inset: 0; z-index: -1; background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 2px); background-size: 30px 30px; }
+    #interactive-bg { position: fixed; inset: 0; z-index: -1; background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 2px); background-size: 20px 20px; }
     .view { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
-    .view.active { display: block; animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
-    @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(2deg); } }
-    @keyframes jelly { 0% { transform: scale(1, 1); } 30% { transform: scale(1.2, 0.8); } 60% { transform: scale(0.8, 1.2); } }
-    @keyframes pulse-neon { 0%, 100% { box-shadow: 0 0 5px var(--pop-blue); } 50% { box-shadow: 0 0 25px var(--pop-blue); } }
-    .header-box { background: #333; border: 4px solid var(--pop-yellow); box-shadow: 6px 6px 0px var(--pop-yellow); padding: 15px; text-align: center; transform: rotate(-1deg); margin-bottom: 40px; }
-    .header-box h1 { font-size: 1.6rem; font-weight: 900; color: white; letter-spacing: 2px; }
-    .pop-card { background: white; border: 4px solid #333; box-shadow: 8px 8px 0px #333; border-radius: 20px; color: #333; padding: 25px; margin-bottom: 30px; position: relative; }
-    #calendar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-    @media (min-width: 480px) { #calendar { grid-template-columns: repeat(3, 1fr); } }
-    .day-item { position: relative; display: flex; align-items: center; justify-content: center; min-height: 110px; animation: float 4s infinite ease-in-out; }
-    .day-item:nth-child(even) { animation-delay: 0.5s; }
-    .mato { position: relative; width: 85px; height: 85px; border-radius: 50%; border: 3px solid #333; box-shadow: 5px 5px 0px rgba(0,0,0,0.2); background: white; transition: 0.3s; }
+    .view.active { display: block; animation: viewIn 0.3s; }
+    @keyframes viewIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .header-box { background: var(--pop-pink); border: 4px solid #333; box-shadow: 4px 4px 0px #333; padding: 15px; text-align: center; transform: rotate(-1deg); margin-bottom: 30px; }
+    .header-box h1 { font-size: 1.5rem; font-weight: 900; color: white; -webkit-text-stroke: 1.5px #333; }
+    .pop-card { background: white; border: 4px solid #333; box-shadow: 6px 6px 0px #333; border-radius: 15px; color: #333; padding: 20px; margin-bottom: 20px; position: relative; }
+    .hato-info { background: #333; border: 4px solid var(--pop-yellow); color: var(--pop-yellow); text-shadow: 0 0 10px var(--pop-yellow); }
+    #calendar { grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    @media (min-width: 480px) { #calendar { grid-template-columns: repeat(7, 1fr); gap: 20px; } }
+    .day-item { position: relative; display: flex; align-items: center; justify-content: center; min-height: 80px; transition: 0.2s; }
+    .mato { position: relative; width: 68px; height: 68px; border-radius: 50%; border: 3px solid #333; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); background: white; transition: 0.2s; }
     .mato.kasumimato { background: radial-gradient(circle, #fff 0% 8%, #333 9% 23%, #fff 24% 39%, #333 40% 55%, #fff 56% 71%, #333 72% 87%, #fff 88% 100%); }
     .mato.hoshimato { background: radial-gradient(circle, #333 18%, #fff 19% 100%); }
-    .day-item:not(.full):hover .mato { transform: scale(1.15); animation: jelly 0.6s; cursor: pointer; border-color: var(--pop-pink); }
-    .day-item.full .mato { filter: grayscale(1); opacity: 0.3; }
-    .arrow::after { content: ''; position: absolute; top: 42px; left: 42px; width: 55px; height: 4px; background: #8B4513; transform-origin: left center; transform: rotate(-45deg); border: 1px solid #333; z-index: 5; }
-    .arrow::before { content: ''; position: absolute; top: -1px; left: 81px; width: 18px; height: 22px; background: #fff; clip-path: polygon(100% 100%, 0% 100%, 25% 50%, 0% 0%, 100% 0%, 75% 50%); transform: translate(-50%, -50%) rotate(-45deg); border: 1px solid #333; z-index: 6; }
-    .date-label { position: absolute; top: 0; left: -10px; background: #333; color: var(--pop-yellow); border: 3px solid #333; padding: 2px 8px; border-radius: 5px; transform: rotate(-10deg); z-index: 10; font-family: 'VT323', monospace; font-size: 1.6rem; line-height: 1; }
-    .slots-badge { position: absolute; bottom: -5px; right: -5px; background: #333; color: var(--pop-blue); padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 900; border: 3px solid var(--pop-blue); animation: pulse-neon 2s infinite; z-index: 10; transform: rotate(5deg); }
-    .badge-full { color: #FF4B4B; border-color: #FF4B4B; animation: none; }
-    input, select { width: 100%; border: 4px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: 800; background: #fff; font-size: 1rem; color: #333; outline: none; }
-    .btn-main { background: var(--pop-yellow); border: 4px solid #333; padding: 18px; border-radius: 50px; font-weight: 900; width: 100%; box-shadow: 6px 6px 0px #333; color: #333; font-size: 1.3rem; transition: 0.2s; text-transform: uppercase; cursor: pointer; }
-    .btn-main:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0px #333; }
-    .cat { position: fixed; width: 80px; z-index: 100; pointer-events: none; transition: 2s; }
+    .day-item:not(.full):hover .mato { transform: scale(1.1); cursor: pointer; border-color: var(--pop-pink); }
+    .day-item.full .mato { filter: grayscale(1) opacity(0.3); }
+    .arrow::after { content: ''; position: absolute; top: 34px; left: 34px; width: 50px; height: 3px; background: #8B4513; transform-origin: left center; transform: rotate(-45deg); border: 0.5px solid #333; z-index: 5; }
+    .arrow::before { content: ''; position: absolute; top: -1px; left: 69px; width: 15px; height: 18px; background: #fff; clip-path: polygon(100% 100%, 0% 100%, 25% 50%, 0% 0%, 100% 0%, 75% 50%); transform: translate(-50%, -50%) rotate(-45deg); border: 1px solid #333; z-index: 6; }
+    .date-label { position: absolute; bottom: -2px; right: -12px; font-size: 17px; color: white; -webkit-text-stroke: 1px #333; font-weight: 900; z-index: 10; }
+    .slots-badge { position: absolute; top: -10px; left: -10px; padding: 2px 6px; border: 2.5px solid #333; border-radius: 6px; font-size: 10px; font-weight: 900; box-shadow: 2px 2px 0px #333; z-index: 10; transform: rotate(-10deg); background: var(--pop-yellow); color: #333; }
+    .badge-full { background: #FF4B4B; color: white; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    input, select { width: 100%; border: 3px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; background: #fff; font-size: 1rem; color: #333; outline: none; }
+    .btn-main { background: var(--pop-yellow); border: 3px solid #333; padding: 15px; border-radius: 50px; font-weight: 900; width: 100%; box-shadow: 4px 4px 0px #333; color: #333; font-size: 1.2rem; transition: 0.1s; cursor: pointer; }
+    .btn-main:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px #333; }
+    .btn-sub { font-size: 12px; color: #eee; text-decoration: underline; margin-top: 25px; display: block; text-align: center; cursor: pointer; }
   </style>
 </head>
 <body>
   <div id="interactive-bg"></div>
 
   <div id="view-main" class="view active">
-    <div class="header-box"><h1 id="title">SHIKATA KYUDO</h1></div>
-    <div id="recheck" class="hidden pop-card border-4 border-yellow-400 text-center shadow-none">
-      <p id="savedInfo" class="text-7xl font-black text-pink-500 my-1"></p>
-      <p class="text-xs text-red-500 font-bold mb-3">スクショしてね！📸</p>
+    <div class="header-box"><h1>SHIKATA KYUDO</h1></div>
+    <div id="recheck" class="hidden pop-card hato-info text-center border-4">
+      <p id="savedInfo" class="text-6xl font-black mb-1 text-white"></p>
+      <p class="text-xs text-yellow-300 font-bold mb-3">学番とこの番号をスクショしてね！📸</p>
       <button onclick="switchView('view-cancel')" class="text-[10px] underline text-gray-400">Cancel</button>
     </div>
-    <div class="pop-card bg-purple-100 text-sm"><ul id="notices" class="space-y-1.5 font-bold text-purple-800"><li>Loading...🎯</li></ul></div>
-    <div id="calendar" class="mb-20"></div>
-    <span onclick="switchView('view-cancel')" class="block text-center text-[10px] opacity-30 underline cursor-pointer">Admin: Cancel</span>
+    <div class="pop-card bg-purple-100 text-sm"><ul id="notices" class="space-y-1 pl-4 font-bold text-purple-900 list-disc"><li>Loading...🎯</li></ul></div>
+    <div id="calendar" class="grid mb-20"></div>
+    <span onclick="switchView('view-cancel')" class="block text-center text-xs opacity-30 underline cursor-pointer mt-20">Admin: Cancel</span>
   </div>
 
   <div id="view-form" class="view">
     <div class="pop-card">
-      <h2 id="fTitle" class="font-black text-xl mb-8 text-pink-500 text-center border-b-4 border-pink-100 pb-2"></h2>
+      <h2 id="fTitle" class="font-black text-xl mb-6 text-pink-500 text-center pb-2 border-b-2"></h2>
       <form id="reservationForm">
         <input type="hidden" id="fDate"><input type="hidden" id="fEvent">
         <input type="text" id="name" placeholder="氏名" required>
@@ -65,7 +61,7 @@
           <option value="" disabled selected>学科を選択</option>
           <option>医</option><option>歯</option><option>看護</option><option>検査</option><option>放射</option>
         </select>
-        <input type="text" id="studentId" placeholder="学籍番号" required>
+        <input type="text" id="studentId" placeholder="学籍番号 (T26XXXX)" required>
         <input type="text" id="contact" placeholder="インスタID or メール" required>
         <button type="submit" id="subBtn" class="btn-main">Book Now! 🎯</button>
         <button type="button" onclick="switchView('view-main')" class="block w-full text-center mt-6 text-gray-400 underline text-xs">Back</button>
@@ -75,17 +71,20 @@
 
   <div id="view-success" class="view">
     <div class="pop-card text-center bg-black border-yellow-400 shadow-[8px_8px_0px_#FFD93D]">
-      <div class="text-7xl mb-6">🎰</div>
-      <h2 class="font-black text-4xl mb-2 italic text-yellow-300">WINNER!</h2>
-      <div class="bg-white p-8 rounded-xl my-6 border-4 border-black"><p id="sDisp" class="text-8xl font-black text-pink-500"></p></div>
-      <p class="text-sm font-black text-yellow-300">スクショを忘れずに！📸</p>
+      <div class="text-7xl mb-6animate-bounce">🎰</div>
+      <h2 class="font-black text-3xl mb-1 italic text-yellow-300">BINGO!</h2>
+      <div class="bg-white p-8 rounded-xl my-6 border-4 border-black shadow-[6px_6px_0px_#ddd]">
+        <p class="text-xs font-bold text-gray-400 mb-2 uppercase">Your Ticket Number</p>
+        <p id="sDisp" class="text-8xl font-black text-pink-500"></p>
+      </div>
+      <p class="text-sm font-black text-red-500leading-relaxed">今すぐスクリーンショット！📸</p>
       <button onclick="location.reload()" class="btn-main bg-white text-black mt-10">OK!</button>
     </div>
   </div>
 
   <div id="view-cancel" class="view">
     <div class="pop-card">
-      <h2 class="font-black text-xl mb-6 text-red-500 text-center uppercase border-b-4 border-red-200 pb-2">Cancel Ticket</h2>
+      <h2 class="font-black text-xl mb-6 text-red-500 text-center uppercase border-b-2 pb-2">Cancel Ticket</h2>
       <form id="cancelForm">
         <input type="number" id="cSerial" placeholder="受付番号" required>
         <input type="text" id="cStudentId" placeholder="学籍番号" required>
@@ -95,11 +94,9 @@
     </div>
   </div>
 
-  <svg id="catTemp" style="display:none;" viewBox="0 0 100 100"><g fill="currentColor"><path d="M86.5,65.8c-1.5-2.2-4.1-3.5-7.1-3.2c-2.9,0.3-5.3,2.2-6.6,4.8c-0.9,1.9-1.1,4-0.5,6c-1.6-0.4-3.2-0.9-4.8-1.6c-0.2-1.4,0.1-2.8,0.8-4.1c1.5-2.9,1.8-6.5,0.7-10c-1.3-4.1-4.8-7.6-9.3-9.2c-1.7-0.6-3.4-0.9-5.2-0.9c-0.6-2.2-1.9-4.3-3.7-5.9c-2.4-2.2-5.6-3.3-8.9-3c-2.5-4-6.6-6.7-11.3-7.3c-3.5-0.4-6.9,0.3-9.9,2.1l-3.3-3.8c-0.6-0.7-1.6-1-2.5-0.8c-0.9,0.2-1.6,0.9-1.9,1.8l-2.3,7.5c-2.4,0.4-4.7,1.4-6.6,3c-4.1,3.4-5.9,8.7-4.6,13.8l0.8,3c-1.7,1.2-3.1,3-3.9,5c-1,2.6-1,5.6-0.1,8.4c0.7,2.2,2,4.1,3.7,5.6c-0.4,1.8-0.4,3.7,0,5.5c0.6,2.4,2,4.4,4,5.8c0.3,1.7,1.1,3.3,2.3,4.6c2.3,2.4,5.6,3.7,8.9,3.5c0.6,0,1.1,0,1.7-0.1c0.9,1.3,2.2,2.3,3.8,2.8c1.2,0.4,2.5,0.5,3.8,0.3c1.6,1.5,3.8,2.4,6,2.3c1.7-0.1,3.3-0.5,4.7-1.4c1.3,1.5,3.2,2.5,5.3,2.6c2.2,0.1,4.3-0.6,5.9-2.1c1.9,1.3,4.2,1.9,6.5,1.6c3.8-0.4,7.1-3,8.6-6.5c0.3-0.7,0.5-1.4,0.7-2.2c1.1,1.2,2.5,2.2,4,2.9c2.7,1.2,5.7,1.2,8.5,0c3-1.3,5-4,5.4-7.3C90.4,72.5,89.1,68.9,86.5,65.8z"/><circle fill="#fff" cx="36" cy="53" r="2"/><circle fill="#fff" cx="52" cy="53" r="2"/></g></svg>
-
   <script>
-    // ★重要：ここに自分の最新GASのウェブアプリURLを貼り付けてください！
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw3YaOzGU02Z7WsBnnB7fkTE5U37n4_h8ETOHTeNsYRQMRbtHKRsYLz_VRMgmLhAoJ6nA/exec";
+    // ★重要：ここに自分のGASのウェブアプリURLを貼り付けてください
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbya-V32wNscjhMY4di1K94G2q6Q2e5gWyy7SHa29JwPCW79QJhUg-mTxIc3ZB_klnKSSQ/exec";
 
     function switchView(id) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -113,10 +110,6 @@
     }
 
     window.onload = async () => {
-      // タイトルクリックで猫
-      const titleEl = document.getElementById('title');
-      if(titleEl) titleEl.onclick = () => { if(++taps >= 20) { localStorage.setItem('cat_unlocked', 'true'); activateCat(); alert('CAT UNLOCKED!'); } };
-
       // 保存番号表示
       try {
         const saved = JSON.parse(localStorage.getItem('kyudo_booking'));
@@ -125,7 +118,7 @@
           document.getElementById('savedInfo').innerText = `No.${saved.serial}`;
         }
       } catch(e) {}
-
+      
       // カレンダー取得
       try {
         const res = await fetch(GAS_URL + "?action=getInitialData").then(r => r.json());
@@ -135,13 +128,16 @@
           const item = document.createElement('div');
           const full = i.max > 0 && i.remaining <= 0;
           item.className = `day-item ${full ? 'full' : ''}`;
-          item.innerHTML = `<div class="date-label">APR.${i.day}</div><div class="mato ${i.hasArrow ? 'kasumimato arrow' : 'hoshimato'}"></div>`;
+          item.innerHTML = `
+            <span class="date-label">${i.day}</span>
+            <div class="mato ${i.hasArrow ? 'kasumimato arrow' : 'hoshimato'}"></div>
+          `;
           if(i.name) {
             const b = document.createElement('div');
             b.className = `slots-badge ${full ? 'badge-full' : ''}`;
-            b.innerText = full ? 'FULL' : (i.max > 0 ? `残${i.remaining}` : 'OPEN');
+            b.innerText = full ? '満' : (i.max > 0 ? `${i.remaining}` : '◎');
             if(!full) item.onclick = () => {
-              document.getElementById('fTitle').innerText = `APR.${i.day} / ${i.name}`;
+              document.getElementById('fTitle').innerText = `${i.day}日: ${i.name}`;
               document.getElementById('fDate').value = i.date;
               document.getElementById('fEvent').value = i.name;
               switchView('view-form');
@@ -150,26 +146,16 @@
           }
           c.appendChild(item);
         });
-        document.getElementById('notices').innerHTML = res.notices.map(n => `<li>📢 ${n.title}: ${n.content}</li>`).join('');
-      } catch(e) { document.getElementById('notices').innerText = "接続エラー。更新してね！"; }
-
-      if(localStorage.getItem('cat_unlocked') === 'true') activateCat();
+        document.getElementById('notices').innerHTML = res.notices.map(n => `<li>📢 <strong>${n.title}:</strong> ${n.content}</li>`).join('');
+      } catch(e) { document.getElementById('notices').innerText = "接続エラー。更新してね🎯"; }
     };
-
-    let taps = 0;
 
     document.getElementById('reservationForm').onsubmit = async (e) => {
       e.preventDefault();
       const b = document.getElementById('subBtn'); b.innerText = "SENDING..."; b.disabled = true;
       try {
         const r = await apiRequest({ action: "processForm", payload: {
-          date: document.getElementById('fDate').value,
-          eventName: document.getElementById('fEvent').value,
-          name: document.getElementById('name').value,
-          kana: document.getElementById('kana').value,
-          major: document.getElementById('major').value,
-          studentId: document.getElementById('studentId').value,
-          contact: document.getElementById('contact').value
+          date: document.getElementById('fDate').value, eventName: document.getElementById('fEvent').value, name: document.getElementById('name').value, kana: document.getElementById('kana').value, major: document.getElementById('major').value, studentId: document.getElementById('studentId').value, contact: document.getElementById('contact').value
         }});
         if(r.error) throw new Error(r.error);
         document.getElementById('sDisp').innerText = r.serial;
@@ -182,34 +168,11 @@
       e.preventDefault();
       if(!confirm("キャンセルしますか？")) return;
       try {
-        const r = await apiRequest({ action: "cancelBooking", payload: {
-          serial: document.getElementById('cSerial').value,
-          studentId: document.getElementById('cStudentId').value
-        }});
+        const r = await apiRequest({ action: "cancelBooking", payload: { serial: document.getElementById('cSerial').value, studentId: document.getElementById('cStudentId').value }});
         if(r.error) throw new Error(r.error);
         alert(r.message); localStorage.removeItem('kyudo_booking'); location.reload();
       } catch(err) { alert(err.message); }
     };
-
-    function activateCat() {
-      document.body.classList.add('cat-unlocked');
-      document.getElementById('interactive-bg').onclick = (e) => {
-        const cols = ['#FF87B2','#FFD93D','#70D6FF','#B388FF','#81C784'];
-        for(let i=0; i<3; i++) {
-          const cat = document.createElement('div'); cat.className='cat';
-          cat.innerHTML = document.getElementById('catTemp').outerHTML.replace('display:none;','').replace(/currentColor/g, cols[i%5]);
-          const sx = Math.random()<0.5?-150:window.innerWidth+150;
-          cat.style.left=sx+'px'; cat.style.top=Math.random()*window.innerHeight+'px';
-          document.body.appendChild(cat);
-          setTimeout(()=>{ 
-            cat.style.left=(e.clientX+(Math.random()-0.5)*150)+'px'; 
-            cat.style.top=(e.clientY+(Math.random()-0.5)*150)+'px'; 
-            cat.style.transform="rotate("+(Math.random()*360)+"deg) scale("+(0.5+Math.random())+")";
-          },50);
-          setTimeout(()=>{ cat.style.opacity=0; setTimeout(()=>cat.remove(),2000); },2500);
-        }
-      };
-    }
   </script>
 </body>
 </html>
